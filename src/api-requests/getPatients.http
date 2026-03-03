@@ -1,0 +1,4 @@
+### GET request to get paginated patients
+GET http://localhost:5201/api/v1/patients?page=0&size=5
+
+###

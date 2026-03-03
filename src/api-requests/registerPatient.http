@@ -1,0 +1,14 @@
+### GET request to example server
+POST http://localhost:5201/api/v1/patients/register
+Content-Type: application/json
+
+{
+  "fullName": "Arjun Mehta",
+  "emailAddress": "arjun.mehta@example.com",
+  "phoneNumber": "9876501234",
+  "address": "21 Park Avenue, Salt Lake, Kolkata",
+  "dateOfBirth": "1994-08-17",
+  "gender": "MALE"
+}
+
+###
