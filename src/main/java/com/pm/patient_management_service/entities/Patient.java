@@ -60,5 +60,8 @@ public class Patient{
         if(this.registrationDate == null){
             this.registrationDate = Instant.now();
         }
+
+        // convert to lowercase for ease in querying
+        this.emailAddress = this.emailAddress.toLowerCase();
     }
 }

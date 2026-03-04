@@ -3,9 +3,10 @@ package com.pm.patient_management_service.services;
 import com.pm.patient_management_service.dtos.CreatePatientRequestDTO;
 import com.pm.patient_management_service.dtos.PatientResponseDTO;
 import com.pm.patient_management_service.entities.Patient;
+import com.pm.patient_management_service.exceptions.EmailAlreadyExistsException;
+import com.pm.patient_management_service.exceptions.PhoneAlreadyExistsException;
 import com.pm.patient_management_service.repositories.PatientRepository;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -59,12 +60,12 @@ public class PatientService {
         // data checks before saving to database
         Optional<Patient> existingPatient = patientRepository.findPatientByEmailAddress(patientDTO.emailAddress());
         if(existingPatient.isPresent()){
-            throw new DataIntegrityViolationException("Patient with email address already exists");
+            throw new EmailAlreadyExistsException("Patient with email address already exists");
         }
 
         existingPatient = patientRepository.findPatientByPhoneNumber(patientDTO.phoneNumber());
         if(existingPatient.isPresent()){
-            throw new DataIntegrityViolationException("Patient with phone number already exists");
+            throw new PhoneAlreadyExistsException("Patient with phone number already exists");
         }
 
         Patient newPatient = mapToEntity(patientDTO);

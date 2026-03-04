@@ -22,6 +22,7 @@ public class PatientController {
         this.patientService = patientService;
     }
 
+    // Endpoint to fetch the patients
     @GetMapping
     public ResponseEntity<ApiResponse<Page<PatientResponseDTO>>> getAllPatients(
             Pageable pageable,
@@ -33,13 +34,14 @@ public class PatientController {
                 ApiResponse.success(
                         result,
                         "Patients fetched successfully",
-                        200,
+                        HttpStatus.OK.value(),
                         request.getRequestURI(),
                         result.getNumberOfElements()
                 )
         );
     }
 
+    // Endpoint to register a new patient in the DB
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<PatientResponseDTO>> registerPatient(
             @Valid @RequestBody CreatePatientRequestDTO patientDTO,
