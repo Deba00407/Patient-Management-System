@@ -2,6 +2,7 @@ package com.pm.patient_management_service.controllers;
 
 import com.pm.patient_management_service.dtos.CreatePatientRequestDTO;
 import com.pm.patient_management_service.dtos.PatientResponseDTO;
+import com.pm.patient_management_service.dtos.UpdatePatientDTO;
 import com.pm.patient_management_service.services.PatientService;
 import com.pm.patient_management_service.utils.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/patients")
@@ -60,5 +62,23 @@ public class PatientController {
                                 1
                         )
                 );
+    }
+
+    @PatchMapping("/update/{patientId}")
+    public ResponseEntity<ApiResponse<Object>> updatePatient(
+            @Valid @RequestBody UpdatePatientDTO patientDTO, @PathVariable UUID patientId,
+            HttpServletRequest request
+    ){
+        patientService.updatePatient(patientId, patientDTO);
+
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        null,
+                        "Patient updated successfully",
+                        HttpStatus.OK.value(),
+                        request.getRequestURI(),
+                        1
+                )
+        );
     }
 }

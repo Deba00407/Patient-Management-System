@@ -44,11 +44,12 @@ public class Patient{
     private String address;
 
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDate dateOfBirth;
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false, updatable = false)
     private Gender gender;
 
     @NotNull

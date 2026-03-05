@@ -1,6 +1,7 @@
 package com.pm.patient_management_service.utils;
 
 import com.pm.patient_management_service.exceptions.EmailAlreadyExistsException;
+import com.pm.patient_management_service.exceptions.PatientNotFoundException;
 import com.pm.patient_management_service.exceptions.PhoneAlreadyExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,5 +52,17 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .body(ApiResponse.error(message, HttpStatus.CONFLICT.value(),
                         "/api/v1/patients/register", "Phone Already Exists"));
+    }
+
+    @ExceptionHandler(PatientNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handlePatientNotFound(PatientNotFoundException ex) {
+        String message = ex.getMessage();
+
+        logger.warn("Patient not found: {}", message);
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(message, HttpStatus.BAD_REQUEST.value(),
+                        "/api/v1/patients/update", "Patient not found"));
     }
 }
