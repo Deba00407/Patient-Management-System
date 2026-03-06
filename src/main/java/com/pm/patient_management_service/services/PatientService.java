@@ -8,6 +8,7 @@ import com.pm.patient_management_service.exceptions.EmailAlreadyExistsException;
 import com.pm.patient_management_service.exceptions.PatientNotFoundException;
 import com.pm.patient_management_service.exceptions.PhoneAlreadyExistsException;
 import com.pm.patient_management_service.repositories.PatientRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -99,7 +100,8 @@ public class PatientService {
         return mapToDTO(savedPatient);
     }
 
-    public void updatePatient(@NotNull UUID patientId, UpdatePatientDTO patientDTO){
+    @Transactional
+    public PatientResponseDTO updatePatient(@NotNull UUID patientId, UpdatePatientDTO patientDTO){
         // check if the patient exists
         Optional<Patient> existingPatient = patientRepository.findById(patientId);
         if(existingPatient.isEmpty()) {
@@ -111,5 +113,17 @@ public class PatientService {
         Patient updatedPatient = updateFields(existingPatient.get(), patientDTO);
 
         patientRepository.save(updatedPatient);
+
+        return mapToDTO(updatedPatient);
+    }
+
+    public PatientResponseDTO getPatientById(@NotNull UUID patientId){
+        Optional<Patient> patient = patientRepository.findById(patientId);
+        if(patient.isEmpty()){
+            String res = String.format("Patient with id %s not found", patientId);
+            throw new PatientNotFoundException(res);
+        }
+
+        return mapToDTO(patient.get());
     }
 }

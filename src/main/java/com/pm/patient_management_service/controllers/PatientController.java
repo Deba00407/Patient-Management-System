@@ -64,19 +64,35 @@ public class PatientController {
                 );
     }
 
+    // Endpoint to update selected fields in the patient entity
     @PatchMapping("/update/{patientId}")
     public ResponseEntity<ApiResponse<Object>> updatePatient(
             @Valid @RequestBody UpdatePatientDTO patientDTO, @PathVariable UUID patientId,
             HttpServletRequest request
     ){
-        patientService.updatePatient(patientId, patientDTO);
+        PatientResponseDTO updatedPatient = patientService.updatePatient(patientId, patientDTO);
 
         return ResponseEntity.ok(
                 ApiResponse.success(
-                        null,
+                        updatedPatient,
                         "Patient updated successfully",
                         HttpStatus.OK.value(),
                         request.getRequestURI(),
+                        1
+                )
+        );
+    }
+
+    // Endpoint to fetch details of a patient by id
+    @GetMapping("/details/{patientId}")
+    public ResponseEntity<ApiResponse<Object>> getPatientById(@PathVariable UUID patientId){
+        PatientResponseDTO patient = patientService.getPatientById(patientId);
+        return ResponseEntity.ok(
+                ApiResponse.success(
+                        patient,
+                        "Patient fetched successfully",
+                        HttpStatus.OK.value(),
+                        "/api/v1/patients/get",
                         1
                 )
         );
